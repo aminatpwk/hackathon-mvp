@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap');
+
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5e6;
+}
+
+.register-form {
+    background-color: #fffef7;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    font-family: 'Roboto Slab', serif;
+    border: 2px solid #8b6f47;
+    max-height: 650px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #4a7043 #f5f5e6;
+}
+
+.register-form h2 {
+    text-align: center;
+    color: #4a7043;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    color: #6b4e31;
+    margin-bottom: 0.3rem;
+    font-size: 1rem;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #a68a64;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #fdfdfd;
+    color: #333;
+    font-family: 'Roboto Slab', serif;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #4a7043;
+}
+
+.form-group input::placeholder {
+    color: #a9a9a9;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: #4a7043;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-family: 'Roboto Slab', serif;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+    background-color: #3a5935;
+}
+
+.error-input {
+    border-color: #a83f3f;
+}
+
+.error-message {
+    color: #a83f3f;
+    font-size: 0.85rem;
+    margin-top: 0.2rem;
+    display: block;
+}
+
+.success-message {
+    color: #4a7043;
+    font-size: 0.95rem;
+    margin-top: 1rem;
+    text-align: center;
+    background-color: #e6f0e6;
+    padding: 0.5rem;
+    border-radius: 5px;
+}

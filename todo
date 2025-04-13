@@ -1,0 +1,41 @@
+hackathon - shenime
+Requirements:
+ - Fermeret te regjistrohen dhe te shtojne produktet e tyre;
+ - Konsumatoret te shohin dhe te kerkojne produktet;
+ - Nje panel i thjeshte per secilin rol (fermer/konsumator);
+ - Nje demo funksionale;
+
+Funksionaliteti Kryesor 40 pike total, secila detyre me nga 8 pike;
+Autentifikim per 2 role (Fermer + Konsumator);
+Homepage per fermerin: SHTO, FSHI, NDRYSHO PRODUKTE
+Faqja e produkteve (liste publike, pra do perfshihen ne nje homepage)(DONE)
+Kerkim ose filter i thjeshte i produkteve (perfshihet te homepage)
+Konsumatori mund te beje nje kerkese per te blere dhe kerkesa i shkon fermerit
+
+UI/UX duhet te jete responsive
+
+Bonus: nderrim gjuhesh, mesazhe mes bleresit dhe fermerit, panel superadmini me menaxhim produktesh dhe perdoruesisht
+
+Skema db:
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    emri VARCHAR(100) NOT NULL,
+    mbiemri VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    qyteti VARCHAR(100) NOT NULL,
+    nr_tel VARCHAR(20),
+    password VARCHAR(50) NOT NULL,
+    role VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE products(
+    product_id INT AUTO_INCREMENT PRIMARY KEY,
+    farmer_id INT NOT NULL,
+    emri VARCHAR(100) NOT NULL,
+    pershkrim TEXT,
+    cmimi DECIMAL(10,2) NOT NULL,
+    sasia INT NOT NULL DEFAULT 0,
+    kategoria VARCHAR(50) NOT NULL,
+    origjina VARCHAR(30) NOT NULL,
+    FOREIGN KEY (farmer_id) REFERENCES users(user_id)
+);

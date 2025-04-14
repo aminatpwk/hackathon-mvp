@@ -334,6 +334,38 @@ const styles = {
         textDecoration: 'none',
         transition: 'color 0.3s ease',
     },
+    showMoreSection:{
+        padding: '16px',
+        backgroundColor: '#fafafa',
+        borderTop: '1px solid #e0e0e0',
+        fontSize: '14px',
+        color: '#333333',
+    },
+    showMoreTitle: {
+        fontSize: '16px',
+        fontWeight: '500',
+        marginBottom: '8px',
+        color: '#235e3a',
+    },
+    showMoreText: {
+        color: '#666666',
+        marginBottom: '12px',
+    },
+    priceInfo: {
+        fontSize: '16px',
+        fontWeight: '600',
+        color: '#72b584',
+        marginBottom: '12px',
+    },
+    review: {
+        borderTop: '1px solid #e0e0e0',
+        paddingTop: '12px',
+        marginTop: '12px',
+    },
+    reviewText: {
+        fontStyle: 'italic',
+        color: '#666666',
+    },
 };
 
 const sectionVariants = {
@@ -346,10 +378,53 @@ const cardVariants = {
     visible: { opacity: 1, scale: 1, transition: { duration: 0.4, ease: 'easeOut' } },
 };
 
+const showMoreVariants = {
+    hidden: {height: 0, opacity: 0},
+    visible: {height: 'auto', opacity: 1, transition: {duration: 0.3, ease: 'easeOut'}},
+};
+
 export default function LandingPage() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
     const navigate = useNavigate();
+
+    const [openProduct, setOpenProduct] = useState(null);
+    const toggleShowMore = (index) => {
+        setOpenProduct(openProduct === index ? null : index);
+    };
+
+    const products = [
+        {
+            img: perime,
+            title: 'Perime Organike',
+            desc: 'Të rritura në mënyrë organike nga fermerët vendas në Korçë',
+            details: {
+                description: 'Këto perime organike përfshijnë domate, kastraveca dhe speca, të kultivuara pa pesticide në fushat e Korçës.',
+                price: '€3/kg',
+                review: { text: 'Perime fantastike, shije e vërtetë! – Ana, Korçë', rating: 4.5 },
+            },
+        },
+        {
+            img: mjalti,
+            title: 'Mjaltë Shqiptare',
+            desc: 'Mjaltë natyrale nga bletarët e Vlorës dhe Beratit',
+            details: {
+                description: 'Mjaltë 100% natyrale, e mbledhur nga lulet e egra të maleve të Vlorës dhe Beratit.',
+                price: '€8/500g',
+                review: { text: 'Shija më e mirë e mjaltës që kam provuar! – Sokol, Tiranë', rating: 5 },
+            },
+        },
+        {
+            img: ullinjte,
+            title: 'Vaj Ulliri',
+            desc: 'Vaj ulliri ekstra i virgjër nga ullishtat e jugut të Shqipërisë',
+            details: {
+                description: 'Vaj ulliri i shtrydhur ftohtë, i prodhuar nga ullinjtë e varietetit Kalinjot në Himarë.',
+                price: '€12/L',
+                review: { text: 'Vaj i mrekullueshëm për sallata! – Ema, Durrës', rating: 4.8 },
+            },
+        },
+    ];
 
     const updateMedia = () => {
         setIsDesktop(window.innerWidth >= 768);
@@ -532,15 +607,11 @@ export default function LandingPage() {
                     </div>
 
                     <div style={isDesktop ? styles.gridDesktop : styles.grid}>
-                        {[
-                            { img: perime, title: 'Perime Organike', desc: 'Të rritura në mënyrë organike nga fermerët vendas në Korçë' },
-                            { img: mjalti, title: 'Mjaltë Shqiptare', desc: 'Mjaltë natyrale nga bletarët e Vlorës dhe Beratit' },
-                            { img: ullinjte, title: 'Vaj Ulliri', desc: 'Vaj ulliri ekstra i virgjër nga ullishtat e jugut të Shqipërisë' },
-                        ].map((product, index) => (
+                        {products.map((product, index) => (
                             <motion.div
                                 key={index}
                                 style={styles.productCard}
-                                variants={cardVariants}
+                                variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1, transition: { duration: 0.4 } } }}
                                 initial="hidden"
                                 whileInView="visible"
                                 viewport={{ once: true }}
@@ -555,10 +626,32 @@ export default function LandingPage() {
                                     <motion.button
                                         style={styles.productLink}
                                         whileHover={{ color: '#235e3a' }}
-                                        whileTap={{ scale: 0.95 }}>
-                                        Shiko më shumë <ChevronDown size={16} />
+                                        whileTap={{ scale: 0.95 }}
+                                        onClick={() => toggleShowMore(index)}>
+                                        {openProduct === index ? 'Fshih' : 'Shiko më shumë'} <ChevronDown size={16} />
                                     </motion.button>
                                 </div>
+                                <AnimatePresence>
+                                    {openProduct === index && (
+                                        <motion.div
+                                            style={styles.showMoreSection}
+                                            variants={showMoreVariants}
+                                            initial="hidden"
+                                            animate="visible"
+                                            exit="hidden">
+                                            <div style={styles.showMoreTitle}>Detaje Produkti</div>
+                                            <p style={styles.showMoreText}>{product.details.description}</p>
+
+                                            <div style={styles.priceInfo}>Çmimi: {product.details.price}</div>
+
+                                            <div style={styles.review}>
+                                                <div style={styles.showMoreTitle}>Vlerësim</div>
+                                                <p style={styles.reviewText}>{product.details.review.text}</p>
+                                                <p style={styles.showMoreText}>Vlerësimi: {product.details.review.rating}/5</p>
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
                             </motion.div>
                         ))}
                     </div>

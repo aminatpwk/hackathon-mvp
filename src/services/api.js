@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_BASE_URL = 'http://localhost/My%20projects/Portfolio%20site/merrbio-farmerdashboard/merrbio/php/api/products.php';
+const API_BASE_URL = 'http://localhost/My%20projects/hackathon-fti2025/php/api/products.php';
 const FARMER_ID = 1;
 export const getProducts = async() => {
     try{

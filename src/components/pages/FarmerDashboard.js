@@ -3,6 +3,7 @@ import { Home, Package, MessageSquare, User, LogOut, Menu } from 'lucide-react';
 import '../../styles/FarmerDashboard.css';
 import { getProducts, addProduct, deleteProduct, updateProduct } from "../../services/api";
 import Chart from 'chart.js/auto';
+import {useNavigate} from 'react-router-dom';
 
 function FarmerDashboard() {
     const [activeTab, setActiveTab] = useState('farmerdashboard');
@@ -23,6 +24,8 @@ function FarmerDashboard() {
         kategoria: '',
         origjina: ''
     });
+
+    const navigate = useNavigate();
 
     const [greeting, setGreeting] = useState('');
 
@@ -249,11 +252,7 @@ function FarmerDashboard() {
                             icon={<LogOut size={20} />}
                             label="Dil"
                             isActive={false}
-                            onClick={() => {
-                                console.log('Logged out');
-                                setIsMobileMenuOpen(false);
-                            }}
-                        />
+                            onClick={() => navigate('/merrbio')}/>
                     </div>
 
                     <div className="mobile-menu">

@@ -1,15 +1,15 @@
 hackathon - shenime
 Requirements:
- - Fermeret te regjistrohen dhe te shtojne produktet e tyre;
- - Konsumatoret te shohin dhe te kerkojne produktet;
- - Nje panel i thjeshte per secilin rol (fermer/konsumator);
+ - Fermeret te regjistrohen DONE dhe te shtojne produktet e tyre;
+ - Konsumatoret te shohin dhe te kerkojne produktet; DONE
+ - Nje panel i thjeshte per secilin rol (fermer/konsumator); DONE
  - Nje demo funksionale;
 
 Funksionaliteti Kryesor 40 pike total, secila detyre me nga 8 pike;
 Autentifikim per 2 role (Fermer + Konsumator);
-Homepage per fermerin: SHTO, FSHI, NDRYSHO PRODUKTE
+Homepage per fermerin: SHTO, FSHI, NDRYSHO PRODUKTE DONE
 Faqja e produkteve (liste publike, pra do perfshihen ne nje homepage)(DONE)
-Kerkim ose filter i thjeshte i produkteve (perfshihet te homepage)
+Kerkim ose filter i thjeshte i produkteve (perfshihet te homepage) DONE
 Konsumatori mund te beje nje kerkese per te blere dhe kerkesa i shkon fermerit
 
 UI/UX duhet te jete responsive

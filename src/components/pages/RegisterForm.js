@@ -1,5 +1,117 @@
 import React, {useState} from 'react';
-import '../../styles/RegisterForm.css';
+// import '../../styles/RegisterForm.css';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+
+const styles = {
+    container: {
+        minHeight: '100vh',
+        backgroundColor: '#f4f4f4',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '48px 16px',
+    },
+    form: {
+        backgroundColor: '#ffffff',
+        padding: '32px',
+        borderRadius: '8px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        maxWidth: '600px',
+        width: '100%',
+        textAlign: 'center',
+    },
+    title: {
+        fontSize: '30px',
+        fontWeight: '800',
+        color: '#333333',
+        marginBottom: '24px',
+    },
+    formGroup: {
+        marginBottom: '16px',
+        textAlign: 'left',
+    },
+    label: {
+        fontSize: '14px',
+        fontWeight: '500',
+        color: '#333333',
+        marginBottom: '8px',
+        display: 'block',
+    },
+    input: {
+        width: '100%',
+        padding: '12px',
+        borderRadius: '6px',
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderColor: '#dbe5ea',
+        fontSize: '16px',
+        color: '#333333',
+        backgroundColor: '#fafafa',
+        transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+    },
+    select: {
+        width: '100%',
+        padding: '12px',
+        borderRadius: '6px',
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderColor: '#dbe5ea',
+        fontSize: '16px',
+        color: '#333333',
+        backgroundColor: '#fafafa',
+        transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+        appearance: 'none',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'right 12px center',
+    },
+    errorInput: {
+        borderColor: '#e74c3c',
+    },
+    errorMessage: {
+        color: '#e74c3c',
+        fontSize: '12px',
+        marginTop: '4px',
+        display: 'block',
+    },
+    successMessage: {
+        color: '#72b584',
+        fontSize: '14px',
+        marginTop: '16px',
+    },
+    submitButton: {
+        backgroundColor: '#42784e',
+        color: '#ffffff',
+        padding: '12px 32px',
+        borderRadius: '6px',
+        fontSize: '18px',
+        fontWeight: '500',
+        border: 'none',
+        cursor: 'pointer',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15)',
+        transition: 'all 0.3s ease, transform 0.2s ease',
+        width: '100%',
+        marginTop: '16px',
+    },
+    loginLink: {
+        backgroundColor: '#ffffff',
+        color: '#235e3a',
+        padding: '12px 32px',
+        borderRadius: '6px',
+        fontSize: '18px',
+        fontWeight: '500',
+        border: '2px solid #235e3a',
+        cursor: 'pointer',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15)',
+        transition: 'all 0.3s ease, transform 0.2s ease',
+        width: '100%',
+        marginTop: '16px',
+        textAlign: 'center',
+        display: 'inline-block',
+        textDecoration: 'none',
+    },
+};
+
 const RegisterForm = () =>{
     const [formData, setFormData] = useState({
         emri: '',
@@ -11,7 +123,14 @@ const RegisterForm = () =>{
         password: '',
     });
 
+    const formVariants = {
+        hidden: { opacity: 0, y: 50 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+    };
+
     const [errors, setErrors] = useState({});
+
+    const navigate = useNavigate();
 
     const validateForm = () => {
         const newErrors = {};
@@ -74,7 +193,7 @@ const RegisterForm = () =>{
             return;
         }
         try{
-            const response = await fetch('http://localhost/My%20projects/Portfolio%20site/merrbio-farmerdashboard/merrbio/php/api/register.php',{
+            const response = await fetch('http://localhost/My%20projects/hackathon-fti2025/php/api/register.php',{
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json',
@@ -104,65 +223,145 @@ const RegisterForm = () =>{
     };
 
     return (
-        <div className = "register-container">
-            <form className="register-form" onSubmit={handleSubmit}>
-                <h2>Bashkohu ne MerrBio</h2>
-                <div className="form-group">
-                    <label htmlFor="emri">Emri juaj</label>
-                    <input type="text" id="emri" name="emri" value={formData.emri} onChange={handleChange}
-                           placeholder="Emri" className={errors.emri ? 'error-input' : ''}/>
-                    {errors.emri && <span className="error-message">{errors.emri}</span>}
+        <div style={styles.container}>
+            <button onClick={() => navigate('/merrbio')} style={{
+                position: 'absolute',
+                top: '16px',
+                left: '16px',
+                background: 'none',
+                border: 'none',
+                color: '#286506',
+                cursor: 'pointer',
+                fontSize: '16px',
+                padding: 0}}>
+                ← Kthehu
+            </button>
+            <motion.form style={styles.form} onSubmit={handleSubmit} variants={formVariants} initial="hidden" animate="visible">
+                <h2 style={styles.title}>Bashkohu në MerrBio</h2>
+                <div style={styles.formGroup}>
+                    <label style={styles.label} htmlFor="emri">Emri juaj</label>
+                    <input
+                        type="text"
+                        id="emri"
+                        name="emri"
+                        value={formData.emri}
+                        onChange={handleChange}
+                        placeholder="Emri"
+                        style={{...styles.input, ...(errors.emri ? styles.errorInput : {})}}
+                        onFocus={(e) => (e.target.style.borderColor = '#72b584')}
+                        onBlur={(e) => (e.target.style.borderColor = errors.emri ? '#e74c3c' : '#dbe5ea')}/>
+                    {errors.emri && <span style={styles.errorMessage}>{errors.emri}</span>}
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="mbiemri">Mbiemri juaj</label>
-                    <input type="text" id="mbiemri" name="mbiemri" value={formData.mbiemri} onChange={handleChange}
-                           placeholder="Mbiemri" className={errors.mbiemri ? 'error-input' : ''}/>
-                    {errors.mbiemri && <span className="error-message">{errors.mbiemri}</span>}
+                <div style={styles.formGroup}>
+                    <label style={styles.label} htmlFor="mbiemri">Mbiemri juaj</label>
+                    <input
+                        type="text"
+                        id="mbiemri"
+                        name="mbiemri"
+                        value={formData.mbiemri}
+                        onChange={handleChange}
+                        placeholder="Mbiemri"
+                        style={{...styles.input, ...(errors.mbiemri ? styles.errorInput : {})}}
+                        onFocus={(e) => (e.target.style.borderColor = '#72b584')}
+                        onBlur={(e) => (e.target.style.borderColor = errors.mbiemri ? '#e74c3c' : '#dbe5ea')}/>
+                    {errors.mbiemri && <span style={styles.errorMessage}>{errors.mbiemri}</span>}
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="qyteti">Qyteti prej nga vini</label>
-                    <input type="text" id="qyteti" name="qyteti" value={formData.qyteti} onChange={handleChange}
-                           placeholder="Qyteti" className={errors.qyteti ? 'error-input' : ''}/>
-                    {errors.qyteti && <span className="error-message">{errors.qyteti}</span>}
+                <div style={styles.formGroup}>
+                    <label style={styles.label} htmlFor="qyteti">Qyteti prej nga vini</label>
+                    <input
+                        type="text"
+                        id="qyteti"
+                        name="qyteti"
+                        value={formData.qyteti}
+                        onChange={handleChange}
+                        placeholder="Qyteti"
+                        style={{...styles.input, ...(errors.qyteti ? styles.errorInput : {})}}
+                        onFocus={(e) => (e.target.style.borderColor = '#72b584')}
+                        onBlur={(e) => (e.target.style.borderColor = errors.qyteti ? '#e74c3c' : '#dbe5ea')}/>
+                    {errors.qyteti && <span style={styles.errorMessage}>{errors.qyteti}</span>}
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="roli">Roli juaj</label>
-                    <select id="roli" name="roli" value={formData.roli} onChange={handleChange} className={errors.roli ? 'error-input' : ''}>
+                <div style={styles.formGroup}>
+                    <label style={styles.label} htmlFor="roli">Roli juaj</label>
+                    <select
+                        id="roli"
+                        name="roli"
+                        value={formData.roli}
+                        onChange={handleChange}
+                        style={{...styles.select, ...(errors.roli ? styles.errorInput : {})}}
+                        onFocus={(e) => (e.target.style.borderColor = '#72b584')}
+                        onBlur={(e) => (e.target.style.borderColor = errors.roli ? '#e74c3c' : '#dbe5ea')}>
                         <option value="fermer">Fermer</option>
-                        <option value="bleres">Bleres</option>
+                        <option value="bleres">Blerës</option>
                     </select>
-                    {errors.roli && <span className="error-message">{errors.roli}</span>}
+                    {errors.roli && <span style={styles.errorMessage}>{errors.roli}</span>}
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="email">E-mail</label>
-                    <input type="email" id="email" name="email" value={formData.email} onChange={handleChange}
-                           placeholder="Jepni e-mail tuaj" className={errors.email ? 'error-input' : ''}/>
-                    {errors.email && <span className="error-message">{errors.email}</span>}
+                <div style={styles.formGroup}>
+                    <label style={styles.label} htmlFor="email">E-mail</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="Jepni e-mail tuaj"
+                        style={{...styles.input, ...(errors.email ? styles.errorInput : {})}}
+                        onFocus={(e) => (e.target.style.borderColor = '#72b584')}
+                        onBlur={(e) => (e.target.style.borderColor = errors.email ? '#e74c3c' : '#dbe5ea')}/>
+                    {errors.email && <span style={styles.errorMessage}>{errors.email}</span>}
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="phone">Nr kontakti</label>
-                    <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange}
-                           placeholder="Jepni nje nr telefoni" className={errors.phone ? 'error-input' : ''}/>
-                    {errors.phone && <span className="error-message">{errors.phone}</span>}
+                <div style={styles.formGroup}>
+                    <label style={styles.label} htmlFor="phone">Nr kontakti</label>
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        placeholder="Jepni një nr telefoni"
+                        style={{...styles.input, ...(errors.phone ? styles.errorInput : {})}}
+                        onFocus={(e) => (e.target.style.borderColor = '#72b584')}
+                        onBlur={(e) => (e.target.style.borderColor = errors.phone ? '#e74c3c' : '#dbe5ea')}/>
+                    {errors.phone && <span style={styles.errorMessage}>{errors.phone}</span>}
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <input type="password" id="password" name="password" value={formData.password}
-                           onChange={handleChange}  placeholder="Vendosni nje password" className={errors.password ? 'error-input' : ''}/>
-                    {errors.password && <span className="error-message">{errors.password}</span>}
+                <div style={styles.formGroup}>
+                    <label style={styles.label} htmlFor="password">Fjalëkalimi</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        placeholder="Vendosni një fjalëkalim"
+                        style={{...styles.input, ...(errors.password ? styles.errorInput : {})}}
+                        onFocus={(e) => (e.target.style.borderColor = '#72b584')}
+                        onBlur={(e) => (e.target.style.borderColor = errors.password ? '#e74c3c' : '#dbe5ea')}/>
+                    {errors.password && <span style={styles.errorMessage}>{errors.password}</span>}
                 </div>
-                <button type="submit" className="submit-button">
+
+                <motion.button type="submit" style={styles.submitButton}
+                               whileHover={{scale: 1.05, backgroundColor: '#bdb627'}} whileTap={{scale: 0.95}}>
                     Regjistrohu
-                </button>
-                {errors.success && <div className="success-message">{errors.success}</div>}
-                {errors.error && <div className="error-message general-error">{errors.error}</div>}
-            </form>
+                </motion.button>
+                {errors.success && <div style={styles.successMessage}>{errors.success}</div>}
+                {errors.error && <div style={styles.errorMessage}>{errors.error}</div>}
+
+                <motion.div
+                    whileHover={{scale: 1.05, backgroundColor: '#f4f4f4'}}
+                    whileTap={{scale: 0.95}}>
+                    <a href="#" style={styles.loginLink} onClick={(e) => {
+                        e.preventDefault();
+                        // navigate('/login');
+                    }}>
+                        Hyr
+                    </a>
+                </motion.div>
+            </motion.form>
         </div>
     );
 };

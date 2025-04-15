@@ -4,6 +4,7 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import RegisterForm from './components/pages/RegisterForm';
 import LandingPage from './components/pages/LandingPage';
 import Products from './components/pages/Products';
+import LoginForm from './components/pages/LoginForm';
 function App() {
   return (
       <Router>
@@ -12,6 +13,7 @@ function App() {
             <Route path="/register" element={<RegisterForm />} />
             <Route path="/farmerdashboard" element={<FarmerDashboard />} />
             <Route path ="/products" element = {<Products/>}/>
+            <Route path = "/hyr" element = {<LoginForm/>}/>
         </Routes>
       </Router>
   );

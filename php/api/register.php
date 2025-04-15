@@ -89,27 +89,41 @@ $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
 
 try {
     $conn = getConnection();
+    $conn -> begin_transaction();
     $stmt = $conn->prepare(
-        'INSERT INTO users (emri, mbiemri, email, qyteti, nr_tel, password, role) 
-         VALUES (?, ?, ?, ?, ?, ?, ?)'
+        'INSERT INTO users (emri, mbiemri, email, qyteti, nr_tel, password) 
+         VALUES (?, ?, ?, ?, ?, ?)'
     );
     $stmt->bind_param(
-        'sssssss',
+        'ssssss',
         $data['emri'],
         $data['mbiemri'],
         $data['email'],
         $data['qyteti'],
         $data['phone'],
-        $hashedPassword,
-        $data['roli']
+        $hashedPassword
     );
     $stmt->execute();
+    $userId = $conn->insert_id;
+    $stmt->close();
+    $stmt = $conn -> prepare('SELECT role_id FROM roles WHERE role_name = ?');
+    $stmt-> bind_param('s', $data['roli']);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $roleRow = $result->fetch_assoc();
+    $roleId = $roleRow['role_id'];
+    $stmt->close();
+    $stmt = $conn->prepare('INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)');
+    $stmt->bind_param('ii', $userId, $roleId);
+    $stmt->execute();
+    $stmt->close();
+    $conn->commit();
     http_response_code(201);
     echo json_encode(['success' => 'Regjistrimi u krye me sukses.']);
     error_log("Success: User registered - " . $data['email']);
-    $stmt->close();
     $conn->close();
 } catch (Exception $e) {
+    $conn ->rollback();
     http_response_code(500);
     echo json_encode(['error' => 'Nuk mund te behej dot regjistrimi i perdoruesit: ' . $e->getMessage()]);
     error_log("Database error: " . $e->getMessage());

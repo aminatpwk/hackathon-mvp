@@ -463,7 +463,8 @@ export default function LandingPage() {
                                     e.target.style.transform = 'scale(1)';
                                 }}
                                 onMouseDown={(e) => (e.target.style.transform = 'scale(0.95)')}
-                                onMouseUp={(e) => (e.target.style.transform = 'scale(1.05)')}>
+                                onMouseUp={(e) => (e.target.style.transform = 'scale(1.05)')}
+                                onClick = {() => navigate('/hyr')}>
                                 Hyr
                             </button>
                         </div>

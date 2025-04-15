@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-// import '../../styles/RegisterForm.css';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
@@ -93,7 +92,7 @@ const styles = {
         width: '100%',
         marginTop: '16px',
     },
-    loginLink: {
+    registerLink: {
         backgroundColor: '#ffffff',
         color: '#235e3a',
         padding: '12px 32px',
@@ -112,15 +111,11 @@ const styles = {
     },
 };
 
-const RegisterForm = () =>{
+const LoginForm = () =>{
     const [formData, setFormData] = useState({
-        emri: '',
-        mbiemri: '',
-        qyteti: '',
-        roli: 'fermer',
         email: '',
-        phone: '',
         password: '',
+        roli: 'fermer',
     });
 
     const formVariants = {
@@ -135,24 +130,6 @@ const RegisterForm = () =>{
     const validateForm = () => {
         const newErrors = {};
 
-        if (!formData.emri) {
-            newErrors.emri = 'Ju lutem vendosni emrin!';
-        } else if (!/^[A-Za-z]{2,}$/.test(formData.emri)) {
-            newErrors.emri = 'Emri duhet te jete te pakten dy karaktere dhe te mos perfshije numra apo shenja.';
-        }
-
-        if (!formData.mbiemri) {
-            newErrors.mbiemri = 'Ju lutem vendosni mbiemrin!';
-        } else if (!/^[A-Za-z]{2,}$/.test(formData.mbiemri)) {
-            newErrors.mbiemri = 'Mbiemri duhet te jete te pakten dy karaktere dhe te mos perfshije numra apo shenja.';
-        }
-
-        if (!formData.qyteti) {
-            newErrors.qyteti = 'Ju lutem vendosni qytetin!';
-        } else if (!/^[A-Za-z\s]{2,}$/.test(formData.qyteti)) {
-            newErrors.qyteti = 'Qyteti duhet te jete te pakten dy karaktere i gjate.';
-        }
-
         if (!['fermer', 'bleres'].includes(formData.roli)) {
             newErrors.roli = 'Ju lutem specifikoni rolin tuaj!';
         }
@@ -161,12 +138,6 @@ const RegisterForm = () =>{
             newErrors.email = 'Ju lutem vendosni e-mail!';
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
             newErrors.email = 'E-mail nuk eshte ne formatin e duhur.';
-        }
-
-        if (!formData.phone) {
-            newErrors.phone = 'Ju lutem vendosni nje numer kontakti!';
-        } else if (!/^\d{10}$/.test(formData.phone.replace(/[\s-]/g, ''))) {
-            newErrors.phone = 'Numri i telefonit duhet te jete me 10 numra.';
         }
 
         if (!formData.password) {
@@ -193,7 +164,7 @@ const RegisterForm = () =>{
             return;
         }
         try{
-            const response = await fetch('http://localhost/My%20projects/hackathon-fti2025/php/api/register.php',{
+            const response = await fetch('http://localhost/My%20projects/hackathon-fti2025/php/api/login.php',{
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json',
@@ -205,17 +176,13 @@ const RegisterForm = () =>{
 
             if(response.ok){
                 setFormData({
-                    emri: '',
-                    mbiemri: '',
-                    qyteti: '',
-                    roli: 'fermer',
                     email: '',
-                    phone: '',
                     password: '',
+                    roli: 'fermer',
                 });
-                setErrors({ success: result.success || 'Regjistrimi u krye me sukses!' });
+                setErrors({ success: result.success || 'Hyrja u krye me sukses!' });
             }else{
-                setErrors(result.errors || { error: result.error || 'Regjistrimi nuk mund te kryhej :(' });
+                setErrors(result.errors || { error: result.error || 'Hyrja nuk mund te kryhej :(' });
             }
         }catch(error){
             setErrors({ error: 'Gabim, ju lutem provoni perseri.' });
@@ -236,69 +203,9 @@ const RegisterForm = () =>{
                 padding: 0}}>
                 ← Kthehu
             </button>
-            <motion.form style={styles.form} onSubmit={handleSubmit} variants={formVariants} initial="hidden" animate="visible">
-                <h2 style={styles.title}>Bashkohu në MerrBio</h2>
-                <div style={styles.formGroup}>
-                    <label style={styles.label} htmlFor="emri">Emri juaj</label>
-                    <input
-                        type="text"
-                        id="emri"
-                        name="emri"
-                        value={formData.emri}
-                        onChange={handleChange}
-                        placeholder="Emri"
-                        style={{...styles.input, ...(errors.emri ? styles.errorInput : {})}}
-                        onFocus={(e) => (e.target.style.borderColor = '#72b584')}
-                        onBlur={(e) => (e.target.style.borderColor = errors.emri ? '#e74c3c' : '#dbe5ea')}/>
-                    {errors.emri && <span style={styles.errorMessage}>{errors.emri}</span>}
-                </div>
-
-                <div style={styles.formGroup}>
-                    <label style={styles.label} htmlFor="mbiemri">Mbiemri juaj</label>
-                    <input
-                        type="text"
-                        id="mbiemri"
-                        name="mbiemri"
-                        value={formData.mbiemri}
-                        onChange={handleChange}
-                        placeholder="Mbiemri"
-                        style={{...styles.input, ...(errors.mbiemri ? styles.errorInput : {})}}
-                        onFocus={(e) => (e.target.style.borderColor = '#72b584')}
-                        onBlur={(e) => (e.target.style.borderColor = errors.mbiemri ? '#e74c3c' : '#dbe5ea')}/>
-                    {errors.mbiemri && <span style={styles.errorMessage}>{errors.mbiemri}</span>}
-                </div>
-
-                <div style={styles.formGroup}>
-                    <label style={styles.label} htmlFor="qyteti">Qyteti prej nga vini</label>
-                    <input
-                        type="text"
-                        id="qyteti"
-                        name="qyteti"
-                        value={formData.qyteti}
-                        onChange={handleChange}
-                        placeholder="Qyteti"
-                        style={{...styles.input, ...(errors.qyteti ? styles.errorInput : {})}}
-                        onFocus={(e) => (e.target.style.borderColor = '#72b584')}
-                        onBlur={(e) => (e.target.style.borderColor = errors.qyteti ? '#e74c3c' : '#dbe5ea')}/>
-                    {errors.qyteti && <span style={styles.errorMessage}>{errors.qyteti}</span>}
-                </div>
-
-                <div style={styles.formGroup}>
-                    <label style={styles.label} htmlFor="roli">Roli juaj</label>
-                    <select
-                        id="roli"
-                        name="roli"
-                        value={formData.roli}
-                        onChange={handleChange}
-                        style={{...styles.select, ...(errors.roli ? styles.errorInput : {})}}
-                        onFocus={(e) => (e.target.style.borderColor = '#72b584')}
-                        onBlur={(e) => (e.target.style.borderColor = errors.roli ? '#e74c3c' : '#dbe5ea')}>
-                        <option value="fermer">Fermer</option>
-                        <option value="bleres">Blerës</option>
-                    </select>
-                    {errors.roli && <span style={styles.errorMessage}>{errors.roli}</span>}
-                </div>
-
+            <motion.form style={styles.form} onSubmit={handleSubmit} variants={formVariants} initial="hidden"
+                         animate="visible">
+                <h2 style={styles.title}>Hyr në MerrBio</h2>
                 <div style={styles.formGroup}>
                     <label style={styles.label} htmlFor="email">E-mail</label>
                     <input
@@ -313,20 +220,20 @@ const RegisterForm = () =>{
                         onBlur={(e) => (e.target.style.borderColor = errors.email ? '#e74c3c' : '#dbe5ea')}/>
                     {errors.email && <span style={styles.errorMessage}>{errors.email}</span>}
                 </div>
-
                 <div style={styles.formGroup}>
-                    <label style={styles.label} htmlFor="phone">Nr kontakti</label>
-                    <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
+                    <label style={styles.label} htmlFor="roli">Roli juaj</label>
+                    <select
+                        id="roli"
+                        name="roli"
+                        value={formData.roli}
                         onChange={handleChange}
-                        placeholder="Jepni një nr telefoni"
-                        style={{...styles.input, ...(errors.phone ? styles.errorInput : {})}}
+                        style={{...styles.select, ...(errors.roli ? styles.errorInput : {})}}
                         onFocus={(e) => (e.target.style.borderColor = '#72b584')}
-                        onBlur={(e) => (e.target.style.borderColor = errors.phone ? '#e74c3c' : '#dbe5ea')}/>
-                    {errors.phone && <span style={styles.errorMessage}>{errors.phone}</span>}
+                        onBlur={(e) => (e.target.style.borderColor = errors.roli ? '#e74c3c' : '#dbe5ea')}>
+                        <option value="fermer">Fermer</option>
+                        <option value="bleres">Blerës</option>
+                    </select>
+                    {errors.roli && <span style={styles.errorMessage}>{errors.roli}</span>}
                 </div>
 
                 <div style={styles.formGroup}>
@@ -346,7 +253,7 @@ const RegisterForm = () =>{
 
                 <motion.button type="submit" style={styles.submitButton}
                                whileHover={{scale: 1.05, backgroundColor: '#bdb627'}} whileTap={{scale: 0.95}}>
-                    Regjistrohu
+                    Hyr
                 </motion.button>
                 {errors.success && <div style={styles.successMessage}>{errors.success}</div>}
                 {errors.error && <div style={styles.errorMessage}>{errors.error}</div>}
@@ -354,11 +261,11 @@ const RegisterForm = () =>{
                 <motion.div
                     whileHover={{scale: 1.05, backgroundColor: '#f4f4f4'}}
                     whileTap={{scale: 0.95}}>
-                    <a href="#" style={styles.loginLink} onClick={(e) => {
+                    <a href="#" style={styles.registerLink} onClick={(e) => {
                         e.preventDefault();
-                        navigate('/hyr');
+                        navigate('/register');
                     }}>
-                        Hyr
+                        Regjistrohu
                     </a>
                 </motion.div>
             </motion.form>
@@ -366,4 +273,4 @@ const RegisterForm = () =>{
     );
 };
 
-export default RegisterForm;
+export default LoginForm;

@@ -1,92 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, ChevronDown, ShoppingBag, X } from 'lucide-react';
+import { Search, Filter, ShoppingBag, X } from 'lucide-react';
 import {Link, useNavigate} from "react-router-dom";
-
-const mockProducts = [
-    {
-        id: 1,
-        name: "Perime Organike",
-        description: "Të rritura në mënyrë organike pa pesticide",
-        price: 250,
-        unit: "kg",
-        image: "vegetable-placeholder.jpg",
-        category: "Vegetables",
-        city: "Korçë"
-    },
-    {
-        id: 2,
-        name: "Mjaltë Lulesh",
-        description: "Mjaltë natyrale nga bletarët vendas",
-        price: 800,
-        unit: "500g",
-        image: "honey-placeholder.jpg",
-        category: "Honey",
-        city: "Vlorë"
-    },
-    {
-        id: 3,
-        name: "Vaj Ulliri Extra i Virgjër",
-        description: "Vaj cilësor nga ullishtat e jugut",
-        price: 1200,
-        unit: "liter",
-        image: "olive-oil-placeholder.jpg",
-        category: "Oils",
-        city: "Sarandë"
-    },
-    {
-        id: 4,
-        name: "Djathë i Bardhë",
-        description: "Djathë tradicional nga fermerët malësorë",
-        price: 600,
-        unit: "kg",
-        image: "cheese-placeholder.jpg",
-        category: "Dairy",
-        city: "Shkodër"
-    },
-    {
-        id: 5,
-        name: "Mollë të Freskëta",
-        description: "Mollë të kultivuara në klimën e freskët malore",
-        price: 180,
-        unit: "kg",
-        image: "apple-placeholder.jpg",
-        category: "Fruits",
-        city: "Korçë"
-    },
-    {
-        id: 6,
-        name: "Verë Shtëpie",
-        description: "Verë e prodhuar nga rrushi vendor",
-        price: 800,
-        unit: "750ml",
-        image: "wine-placeholder.jpg",
-        category: "Beverages",
-        city: "Berat"
-    },
-    {
-        id: 7,
-        name: "Domate të Kuqe",
-        description: "Domate të freskëta dhe të shijshme",
-        price: 200,
-        unit: "kg",
-        image: "tomato-placeholder.jpg",
-        category: "Vegetables",
-        city: "Fier"
-    },
-    {
-        id: 8,
-        name: "Raki Rrushi",
-        description: "Raki tradicionale shqiptare",
-        price: 1500,
-        unit: "750ml",
-        image: "raki-placeholder.jpg",
-        category: "Beverages",
-        city: "Gjirokastër"
-    }
-];
-
-const allCities = [...new Set(mockProducts.map(product => product.city))];
-const allCategories = [...new Set(mockProducts.map(product => product.category))];
 
 export default function ProductsPage() {
     const [products, setProducts] = useState([]);
@@ -97,6 +11,75 @@ export default function ProductsPage() {
     const [showFilters, setShowFilters] = useState(false);
     const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
     const navigate = useNavigate();
+
+    const allCities = [...new Set(products.map(product => product.city))];
+    const allCategories = [...new Set(products.map(product => product.category))];
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await fetch('http://localhost/My%20projects/hackathon-fti2025/php/api/allproducts.php'); // Update with your actual domain and path
+                const data = await response.json();
+                setProducts(data);
+                setFilteredProducts(data);
+            } catch (error) {
+                console.error('Error fetching products:', error);
+            }
+        };
+
+        fetchProducts();
+    }, []);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsDesktop(window.innerWidth >= 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    useEffect(() => {
+        let result = [...products];
+
+        if (searchTerm) {
+            result = result.filter(product =>
+                product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                product.description.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+
+        if (selectedCity) {
+            result = result.filter(product => product.city === selectedCity);
+        }
+
+        if (selectedCategory) {
+            result = result.filter(product => product.category === selectedCategory);
+        }
+
+        setFilteredProducts(result);
+    }, [products, searchTerm, selectedCity, selectedCategory]);
+
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const handleResetFilters = () => {
+        setSelectedCity('');
+        setSelectedCategory('');
+        setFilteredProducts(products);
+    };
+
+    const removeFilter = (filterType) => {
+        if (filterType === 'city') {
+            setSelectedCity('');
+        } else if (filterType === 'category') {
+            setSelectedCategory('');
+        }
+    };
+
+    const [hoveredProductId, setHoveredProductId] = useState(null);
+
     const styles = {
         container: {
             backgroundColor: '#f4f4f4',
@@ -360,64 +343,10 @@ export default function ProductsPage() {
         },
     };
 
-    useEffect(() => {
-        const handleResize = () => {
-            setIsDesktop(window.innerWidth >= 768);
-        };
-
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    useEffect(() => {
-        setProducts(mockProducts);
-        setFilteredProducts(mockProducts);
-    }, []);
-
-    useEffect(() => {
-        let result = [...products];
-
-        if (searchTerm) {
-            result = result.filter(product =>
-                product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                product.description.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-        }
-
-        if (selectedCity) {
-            result = result.filter(product => product.city === selectedCity);
-        }
-
-        if (selectedCategory) {
-            result = result.filter(product => product.category === selectedCategory);
-        }
-
-        setFilteredProducts(result);
-    }, [products, searchTerm, selectedCity, selectedCategory]);
-
-    const handleSearch = (e) => {
-        setSearchTerm(e.target.value);
-    };
-
-    const handleResetFilters = () => {
-        setSelectedCity('');
-        setSelectedCategory('');
-    };
-
-    const removeFilter = (filterType) => {
-        if (filterType === 'city') {
-            setSelectedCity('');
-        } else if (filterType === 'category') {
-            setSelectedCategory('');
-        }
-    };
-
-    const [hoveredProductId, setHoveredProductId] = useState(null);
-
     return (
         <div style={styles.container}>
             <header style={styles.header}>
-                <button onClick={() => navigate('/merrbio')} style = {{
+                <button onClick={() => navigate('/merrbio')} style={{
                     position: 'absolute',
                     top: '16px',
                     left: '16px',
@@ -426,22 +355,19 @@ export default function ProductsPage() {
                     color: '#ffffff',
                     cursor: 'pointer',
                     fontSize: '16px',
-                    padding: 0
-                }}>
+                    padding: 0}}>
                     ← Kthehu
                 </button>
 
                 <h1 style={styles.title}>Produktet Tona</h1>
                 <p style={styles.subtitle}>
-                    Zgjidhni produktet më të mira bujqësore nga fermerët vendas shqiptarë
+                    Zgjidhni produktet më të mira bujqësore të rritura në mënyrë organike pa pesticide
                 </p>
 
                 <div style={styles.searchContainer}>
                     <Search size={20} style={styles.searchIcon}/>
                     <input type="text" placeholder="Kërko produkte..." style={styles.searchInput} value={searchTerm} onChange={handleSearch}/>
-                    <button
-                        style={styles.filterButton}
-                        onClick={() => setShowFilters(!showFilters)}>
+                    <button style={styles.filterButton} onClick={() => setShowFilters(!showFilters)}>
                         <Filter size={20} style={{marginRight: '8px'}}/>
                         Filtro
                     </button>
@@ -457,17 +383,14 @@ export default function ProductsPage() {
                             <select style={styles.filterSelect} value={selectedCity} onChange={(e) => setSelectedCity(e.target.value)}>
                                 <option value="">Të gjitha qytetet</option>
                                 {allCities.map(city => (
-                                    <option key={city} value={city}>{city}</option>))}
+                                    <option key={city} value={city}>{city}</option>
+                                ))}
                             </select>
                         </div>
 
                         <div style={styles.filterGroup}>
                             <label style={styles.filterLabel}>Kategoria</label>
-                            <select
-                                style={styles.filterSelect}
-                                value={selectedCategory}
-                                onChange={(e) => setSelectedCategory(e.target.value)}
-                            >
+                            <select style={styles.filterSelect} value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
                                 <option value="">Të gjitha kategoritë</option>
                                 {allCategories.map(category => (
                                     <option key={category} value={category}>{category}</option>
@@ -477,16 +400,10 @@ export default function ProductsPage() {
                     </div>
 
                     <div style={styles.filterActions}>
-                        <button
-                            style={{...styles.button, ...styles.resetButton}}
-                            onClick={handleResetFilters}
-                        >
+                        <button style={{...styles.button, ...styles.resetButton}} onClick={handleResetFilters}>
                             Reseto
                         </button>
-                        <button
-                            style={{...styles.button, ...styles.applyButton}}
-                            onClick={() => setShowFilters(false)}
-                        >
+                        <button style={{...styles.button, ...styles.applyButton}} onClick={() => setShowFilters(false)}>
                             Apliko Filtrat
                         </button>
                     </div>
@@ -523,10 +440,6 @@ export default function ProductsPage() {
                                 }}
                                 onMouseEnter={() => setHoveredProductId(product.id)}
                                 onMouseLeave={() => setHoveredProductId(null)}>
-                                <div style={{
-                                        ...styles.productImage,
-                                        // backgroundImage: `url(${product.image})`
-                                    }}/>
                                 <div style={styles.productContent}>
                                     <div style={styles.productCategory}>{product.category}</div>
                                     <div style={styles.productLocation}>
@@ -578,29 +491,29 @@ export default function ProductsPage() {
                             <ul style={styles.footerList}>
                                 <li style={styles.footerListItem}>
                                     <Link to="/terms" style={styles.footerLink}
-                                          onMouseEnter={(e) => (e.target.style.color = '#ffffff')}
-                                          onMouseLeave={(e) => (e.target.style.color = '#72b584')}>
+                                        onMouseEnter={(e) => (e.target.style.color = '#ffffff')}
+                                        onMouseLeave={(e) => (e.target.style.color = '#72b584')}>
                                         Kushtet e Përdorimit
                                     </Link>
                                 </li>
                                 <li style={styles.footerListItem}>
                                     <Link to="/privacy" style={styles.footerLink}
-                                          onMouseEnter={(e) => (e.target.style.color = '#ffffff')}
-                                          onMouseLeave={(e) => (e.target.style.color = '#72b584')}>
+                                        onMouseEnter={(e) => (e.target.style.color = '#ffffff')}
+                                        onMouseLeave={(e) => (e.target.style.color = '#72b584')}>
                                         Politika e Privatësisë
                                     </Link>
                                 </li>
                                 <li style={styles.footerListItem}>
                                     <Link to="/blog" style={styles.footerLink}
-                                          onMouseEnter={(e) => (e.target.style.color = '#ffffff')}
-                                          onMouseLeave={(e) => (e.target.style.color = '#72b584')}>
+                                        onMouseEnter={(e) => (e.target.style.color = '#ffffff')}
+                                        onMouseLeave={(e) => (e.target.style.color = '#72b584')}>
                                         Blog
                                     </Link>
                                 </li>
                                 <li style={styles.footerListItem}>
                                     <Link to="/faq" style={styles.footerLink}
-                                          onMouseEnter={(e) => (e.target.style.color = '#ffffff')}
-                                          onMouseLeave={(e) => (e.target.style.color = '#72b584')}>
+                                        onMouseEnter={(e) => (e.target.style.color = '#ffffff')}
+                                        onMouseLeave={(e) => (e.target.style.color = '#72b584')}>
                                         FAQ
                                     </Link>
                                 </li>

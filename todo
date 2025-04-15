@@ -1,6 +1,6 @@
 hackathon - shenime
 Requirements:
- - Fermeret te regjistrohen DONE dhe te shtojne produktet e tyre;
+ - Fermeret te regjistrohen DONE dhe te shtojne produktet e tyre; (ME PA PJESEN E LOGINIT SE KU QENDRON PROBLEMI)
  - Konsumatoret te shohin dhe te kerkojne produktet; DONE
  - Nje panel i thjeshte per secilin rol (fermer/konsumator); DONE
  - Nje demo funksionale;
@@ -39,3 +39,22 @@ CREATE TABLE products(
     origjina VARCHAR(30) NOT NULL,
     FOREIGN KEY (farmer_id) REFERENCES users(user_id)
 );
+
+Many-to-many relationships:
+1. Keep the users table as it is but remove the role field;
+2. Create a separate roles table with role IDs and names;
+3. Create a junction table user_roles that connects users to their roles;
+users table:
+- user_id (PK)
+- username
+- password
+- other user details...
+
+roles table:
+- role_id (PK)
+- role_name (e.g., 'farmer', 'consumer')
+
+user_roles table:
+- user_id (FK)
+- role_id (FK)
+- (Together these form a composite PK)

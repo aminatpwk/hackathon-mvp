@@ -10,6 +10,8 @@ export default function ProductsPage() {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [showFilters, setShowFilters] = useState(false);
     const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
     const navigate = useNavigate();
 
     const allCities = [...new Set(products.map(product => product.city))];
@@ -68,6 +70,16 @@ export default function ProductsPage() {
         setSelectedCity('');
         setSelectedCategory('');
         setFilteredProducts(products);
+    };
+
+    const handleProductClick = (product) => {
+        setSelectedProduct(product);
+        setShowModal(true);
+    };
+
+    const handlePurchaseRequest = () => {
+        alert(`Kërkesa për blerjen e produktit "${selectedProduct.name}" u dërgua me sukses!`);
+        setShowModal(false);
     };
 
     const removeFilter = (filterType) => {
@@ -343,10 +355,100 @@ export default function ProductsPage() {
         },
     };
 
+    const modalStyles = {
+        overlay: {
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            zIndex: 1000,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        modal: {
+            backgroundColor: '#ffffff',
+            borderRadius: '8px',
+            padding: '24px',
+            maxWidth: '500px',
+            width: '90%',
+            maxHeight: '90vh',
+            overflow: 'auto',
+            position: 'relative',
+        },
+        closeButton: {
+            position: 'absolute',
+            top: '16px',
+            right: '16px',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            color: '#666666',
+            padding: 0,
+        },
+        modalImage: {
+            width: '100%',
+            height: '200px',
+            backgroundColor: '#dbe5ea',
+            borderRadius: '4px',
+            marginBottom: '16px',
+        },
+        modalCategory: {
+            fontSize: '14px',
+            color: '#72b584',
+            textTransform: 'uppercase',
+            fontWeight: '500',
+            marginBottom: '8px',
+        },
+        modalTitle: {
+            fontSize: '24px',
+            fontWeight: '700',
+            color: '#333333',
+            marginBottom: '8px',
+        },
+        modalLocation: {
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: '14px',
+            color: '#666666',
+            marginBottom: '16px',
+        },
+        modalDescription: {
+            fontSize: '16px',
+            color: '#333333',
+            marginBottom: '24px',
+            lineHeight: '1.5',
+        },
+        modalPrice: {
+            fontSize: '24px',
+            fontWeight: '700',
+            color: '#235e3a',
+            marginBottom: '24px',
+        },
+        modalUnit: {
+            fontSize: '16px',
+            color: '#666666',
+        },
+        purchaseButton: {
+            backgroundColor: '#235e3a',
+            color: '#ffffff',
+            border: 'none',
+            borderRadius: '4px',
+            padding: '12px 24px',
+            fontSize: '16px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            width: '100%',
+            transition: 'background-color 0.3s ease',
+        },
+    };
+
     return (
         <div style={styles.container}>
             <header style={styles.header}>
-                <button onClick={() => navigate('/merrbio')} style={{
+                <button onClick={() => navigate(-1)} style={{
                     position: 'absolute',
                     top: '16px',
                     left: '16px',
@@ -439,7 +541,8 @@ export default function ProductsPage() {
                                     ...(hoveredProductId === product.id ? styles.productCardHover : {})
                                 }}
                                 onMouseEnter={() => setHoveredProductId(product.id)}
-                                onMouseLeave={() => setHoveredProductId(null)}>
+                                onMouseLeave={() => setHoveredProductId(null)}
+                                 onClick={() => handleProductClick(product)}>
                                 <div style={styles.productContent}>
                                     <div style={styles.productCategory}>{product.category}</div>
                                     <div style={styles.productLocation}>
@@ -465,6 +568,39 @@ export default function ProductsPage() {
                     </div>
                 )}
             </main>
+
+            {showModal && selectedProduct && (
+                <div style={modalStyles.overlay} onClick={() => setShowModal(false)}>
+                    <div style={modalStyles.modal} onClick={(e) => e.stopPropagation()}>
+                        <button style={modalStyles.closeButton} onClick={() => setShowModal(false)}>
+                            <X size={24} />
+                        </button>
+
+                        <div style={modalStyles.modalImage}></div>
+
+                        <div style={modalStyles.modalCategory}>{selectedProduct.category}</div>
+
+                        <h2 style={modalStyles.modalTitle}>{selectedProduct.name}</h2>
+
+                        <div style={modalStyles.modalLocation}>
+                            <span>🌍 {selectedProduct.city}</span>
+                        </div>
+
+                        <p style={modalStyles.modalDescription}>{selectedProduct.description}</p>
+
+                        <div style={modalStyles.modalPrice}>
+                            {selectedProduct.price} ALL
+                            <span style={modalStyles.modalUnit}> / {selectedProduct.unit}</span>
+                        </div>
+
+                        <button style={modalStyles.purchaseButton} onClick={handlePurchaseRequest}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = '#1a472d'}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = '#235e3a'}>
+                            Bëj një kërkesë për blerje
+                        </button>
+                    </div>
+                </div>
+            )}
 
             <footer style={styles.footer}>
                 <div style={styles.footerContent}>

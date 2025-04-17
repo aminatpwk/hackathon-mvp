@@ -221,46 +221,26 @@ function FarmerDashboard() {
                     </div>
 
                     <div className={`nav-links desktop-menu ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
-                        <NavItem
-                            icon={<Home size={20} />}
-                            label="Kryefaqja"
-                            isActive={activeTab === 'farmerdashboard'}
+                        <NavItem icon={<Home size={20} />} label="Kryefaqja" isActive={activeTab === 'farmerdashboard'}
                             onClick={() => {
                                 setActiveTab('farmerdashboard');
                                 setIsMobileMenuOpen(false);
-                            }}
-                        />
-                        <NavItem
-                            icon={<Package size={20} />}
-                            label="Lista e Produkteve"
-                            isActive={activeTab === 'products'}
+                            }}/>
+                        <NavItem icon={<Package size={20} />} label="Lista e Produkteve" isActive={activeTab === 'products'}
                             onClick={() => {
                                 setActiveTab('products');
                                 setIsMobileMenuOpen(false);
-                            }}
-                        />
-                        <NavItem
-                            icon={<MessageSquare size={20} />}
-                            label="Kerkesat per blerje"
-                            isActive={activeTab === 'requests'}
+                            }}/>
+                        <NavItem icon={<MessageSquare size={20} />} label="Kerkesat per blerje" isActive={activeTab === 'requests'}
                             onClick={() => {
                                 setActiveTab('requests');
-                                setIsMobileMenuOpen(false);
-                            }}
-                        />
-                        <NavItem
-                            icon={<LogOut size={20} />}
-                            label="Dil"
-                            isActive={false}
+                                setIsMobileMenuOpen(false);}}/>
+                        <NavItem icon={<LogOut size={20} />} label="Dil" isActive={false}
                             onClick={() => navigate('/merrbio')}/>
                     </div>
 
                     <div className="mobile-menu">
-                        <button
-                            className="mobile-menu-button"
-                            onClick={toggleMobileMenu}
-                            aria-label="Toggle menu"
-                        >
+                        <button className="mobile-menu-button" onClick={toggleMobileMenu} aria-label="Toggle menu">
                             <Menu size={24} />
                         </button>
                     </div>
@@ -380,51 +360,23 @@ function FarmerDashboard() {
                         <form onSubmit={handleSubmit}>
                             <label>
                                 Emri:
-                                <input
-                                    type="text"
-                                    name="emri"
-                                    value={newProduct.emri}
-                                    onChange={handleInputChange}
-                                    required
-                                />
+                                <input type="text" name="emri" value={newProduct.emri} onChange={handleInputChange} required/>
                             </label>
                             <label>
                                 Pershkrimi:
-                                <textarea
-                                    name="pershkrimi"
-                                    value={newProduct.pershkrimi}
-                                    onChange={handleInputChange}
-                                    required
-                                />
+                                <textarea name="pershkrimi" value={newProduct.pershkrimi} onChange={handleInputChange} required/>
                             </label>
                             <label>
                                 Cmimi per Kg:
-                                <input
-                                    type="number"
-                                    name="cmimi"
-                                    value={newProduct.cmimi}
-                                    onChange={handleInputChange}
-                                    required
-                                />
+                                <input type="number" name="cmimi" value={newProduct.cmimi} onChange={handleInputChange} required/>
                             </label>
                             <label>
                                 Sasia:
-                                <input
-                                    type="number"
-                                    name="sasia"
-                                    value={newProduct.sasia}
-                                    onChange={handleInputChange}
-                                    required
-                                />
+                                <input type="number" name="sasia" value={newProduct.sasia} onChange={handleInputChange} required/>
                             </label>
                             <label>
                                 Kategoria:
-                                <select
-                                    name="kategoria"
-                                    value={newProduct.kategoria}
-                                    onChange={handleInputChange}
-                                    required
-                                >
+                                <select name="kategoria" value={newProduct.kategoria} onChange={handleInputChange} required>
                                     <option value="">Zgjidh Kategorinë</option>
                                     <option value="Fruta">Fruta</option>
                                     <option value="Perime">Perime</option>
@@ -434,11 +386,7 @@ function FarmerDashboard() {
                             </label>
                             <label>
                                 Origjina:
-                                <select
-                                    name="origjina"
-                                    value={newProduct.origjina}
-                                    onChange={handleInputChange}
-                                    required>
+                                <select name="origjina" value={newProduct.origjina} onChange={handleInputChange} required>
                                     <option value="">Zgjidh Origjinën</option>
                                     <option value="Shqipëri">Shqipëri</option>
                                     <option value="Itali">Itali</option>
@@ -471,50 +419,23 @@ function FarmerDashboard() {
                         <form onSubmit={handleUpdateProduct}>
                             <label>
                                 Emri:
-                                <input
-                                    type="text"
-                                    name="emri"
-                                    value={editProduct.emri}
-                                    onChange={(e) => handleInputChange(e, true)}
-                                    required
-                                />
+                                <input type="text"name="emri" value={editProduct.emri} onChange={(e) => handleInputChange(e, true)} required />
                             </label>
                             <label>
                                 Pershkrimi:
-                                <textarea
-                                    name="pershkrimi"
-                                    value={editProduct.pershkrimi}
-                                    onChange={(e) => handleInputChange(e, true)}
-                                    required
-                                />
+                                <textarea name="pershkrimi" value={editProduct.pershkrimi} onChange={(e) => handleInputChange(e, true)} required/>
                             </label>
                             <label>
                                 Cmimi per Kg:
-                                <input
-                                    type="number"
-                                    name="cmimi"
-                                    value={editProduct.cmimi}
-                                    onChange={(e) => handleInputChange(e, true)}
-                                    required
-                                />
+                                <input type="number" name="cmimi" value={editProduct.cmimi} onChange={(e) => handleInputChange(e, true)} required/>
                             </label>
                             <label>
                                 Sasia:
-                                <input
-                                    type="number"
-                                    name="sasia"
-                                    value={editProduct.sasia}
-                                    onChange={(e) => handleInputChange(e, true)}
-                                    required
-                                />
+                                <input type="number" name="sasia" value={editProduct.sasia} onChange={(e) => handleInputChange(e, true)} required/>
                             </label>
                             <label>
                                 Kategoria:
-                                <select
-                                    name="kategoria"
-                                    value={editProduct.kategoria}
-                                    onChange={(e) => handleInputChange(e, true)}
-                                    required>
+                                <select name="kategoria" value={editProduct.kategoria} onChange={(e) => handleInputChange(e, true)} required>
                                     <option value="">Zgjidh Kategorinë</option>
                                     <option value="Fruta">Fruta</option>
                                     <option value="Perime">Perime</option>
@@ -524,12 +445,7 @@ function FarmerDashboard() {
                             </label>
                             <label>
                                 Origjina:
-                                <select
-                                    name="origjina"
-                                    value={editProduct.origjina}
-                                    onChange={(e) => handleInputChange(e, true)}
-                                    required
-                                >
+                                <select name="origjina" value={editProduct.origjina} onChange={(e) => handleInputChange(e, true)} required>
                                     <option value="">Zgjidh Origjinën</option>
                                     <option value="Shqipëri">Shqipëri</option>
                                     <option value="Itali">Itali</option>
@@ -546,7 +462,7 @@ function FarmerDashboard() {
 
             <footer className="footer">
                 <div className="footer-content">
-                    <p className="copyright">© {new Date().getFullYear()} MerrBio. Zhvilluar nga codHers.</p>
+                    <p className="copyright">© {new Date().getFullYear()} MerrBio. Zhvilluar nga Amina.</p>
                 </div>
             </footer>
         </div>

@@ -1,70 +1,55 @@
-# Getting Started with Create React App
+# MerrBio
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A simple web platform that connects **farmers** with **consumers**, allowing fresh, local products to be showcased and shared with ease.
 
-## Available Scripts
+## Description
 
-In the project directory, you can run:
+**MerrBio** provides two user roles — **Farmer** and **Consumer** — each with a dedicated panel and a tailored experience. Farmers can manage their products, while consumers can browse, search, and request purchases. The platform includes a responsive design and a functional demo.
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+| Feature | Description | Status |
+|--------|-------------|--------|
+| 👤 Authentication | Secure login system for Farmers and Consumers | ✅ Done |
+| 🧺 Farmer Dashboard | Add, Delete, and Modify products | ✅ Done |
+| 🏡 Public Homepage | Displays all products to all users | ✅ Done |
+| 🔍 Product Search/Filter | Simple search or filter functionality | ✅ Done |
+| 📩 Purchase Request | Consumers can send requests to farmers | 🔄 In Progress |
+| 📱 Responsive Design | Optimized for all screen sizes | ✅ Done |
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## User Roles
 
-### `npm test`
+### 👨‍🌾 Farmer
+- Register and log in
+- Add new products
+- Delete or update existing products
+- View requests from consumers
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 🛒 Consumer
+- Register and log in
+- Browse the public product list
+- Search/filter products
+- Send purchase requests to farmers
 
-### `npm run build`
+##  Functional Requirements
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- ✅ Authentication for both roles (Farmer + Consumer)
+- ✅ Farmer homepage: Add, Delete, Update products
+- ✅ Public product list (homepage)
+- ✅ Product search or filtering
+- 🔄 Consumer can send purchase requests to farmers
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+##  Demo
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+A functional demo will be available soon. 
 
-### `npm run eject`
+##  Tech Stack
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- **Frontend**: React.js, Tailwind CSS
+- **Backend**: PHP
+- **Database**: MySQL
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Inspiration
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+This platform is built to support local producers and bring fresh goods closer to conscious consumers. It's more than code — it's community.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

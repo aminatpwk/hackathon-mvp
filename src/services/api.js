@@ -1,63 +1,51 @@
 import axios from 'axios';
+
 const API_BASE_URL = 'http://localhost/My%20projects/hackathon-fti2025/php/api/products.php';
-const FARMER_ID = 1;
-export const getProducts = async() => {
-    try{
-        const response = await axios.get(`${API_BASE_URL}?farmer_id=${FARMER_ID}`);
+
+// Axios default to include session cookies
+axios.defaults.withCredentials = true;
+
+export const getProducts = async () => {
+    try {
+        const response = await axios.get(API_BASE_URL);
         console.log('API Response:', response.data);
         return response.data;
-    }catch(error){
-        console.error("Error fetching products:", error);
+    } catch (error) {
+        console.error("Error fetching products:", error.response?.data || error.message);
         throw error;
     }
 };
 
-export const addProduct = async(productData) => {
+export const addProduct = async (productData) => {
     try {
-        const { emri, pershkrimi, cmimi, sasia, kategoria, origjina } = productData;
-        const data = {
-            emri,
-            pershkrimi,
-            cmimi,
-            sasia,
-            kategoria,
-            origjina,
-            farmer_id: FARMER_ID
-        };
-        const response = await axios.post(API_BASE_URL, data);
+        const response = await axios.post(API_BASE_URL, productData);
         return response.data;
     } catch (error) {
-        console.error("Error adding product:", error);
+        console.error("Error adding product:", error.response?.data || error.message);
         throw error;
     }
 };
 
 export const deleteProduct = async (productId) => {
     try {
-        const data = {
-            product_id: productId,
-            farmer_id: FARMER_ID
-        };
-
-        const response = await axios.delete(API_BASE_URL, { data });
+        const response = await axios.delete(API_BASE_URL, {
+            data: { product_id: productId },
+        });
         console.log('Product deleted:', response.data);
         return response.data;
     } catch (error) {
-        console.error("Error deleting product:", error);
+        console.error("Error deleting product:", error.response?.data || error.message);
         throw error;
     }
 };
 
 export const updateProduct = async (productId, productData) => {
     try {
-        const data = { ...productData, product_id: productId, farmer_id: FARMER_ID };
+        const data = { ...productData, product_id: productId };
         const response = await axios.put(API_BASE_URL, data);
         return response.data;
     } catch (error) {
-        console.error('Update error:', error);
+        console.error("Update error:", error.response?.data || error.message);
         throw error;
     }
 };
-
-
-

@@ -70,6 +70,7 @@ function FarmerDashboard() {
         else setGreeting('Mirembrema! :)');
     }, [activeTab]);
 
+
     const fetchProducts = async () => {
         try {
             setLoading(true);

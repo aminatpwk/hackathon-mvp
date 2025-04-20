@@ -170,21 +170,36 @@ const LoginForm = () =>{
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(formData),
+                credentials: 'include',
             });
 
             const result = await response.json();
+            console.log("Reponse received: ", result);
 
-            if(response.ok){
-                setFormData({
-                    email: '',
-                    password: '',
-                    roli: 'fermer',
-                });
-                setErrors({ success: result.success || 'Hyrja u krye me sukses!' });
-            }else{
-                setErrors(result.errors || { error: result.error || 'Hyrja nuk mund te kryhej :(' });
+            if (result.errors) {
+                setErrors(result.errors);
+                return;
+            } else if (result.error) {
+                setErrors({ error: result.error });
+                return;
+            }
+
+            if (result.success) {
+                if (result.redirect) {
+                    sessionStorage.setItem('user_id', result.user_id || '');
+                    sessionStorage.setItem('role', result.role || '');
+                    sessionStorage.setItem('logged_in', 'true');
+                    if(result.redirect){
+                        console.log("Redirecting to:", result.redirect);
+                        navigate(result.redirect);
+                    }else{
+                        const defaultRedirect = formData.roli === 'fermer' ? '/farmerdashboard' : '/merrbio';
+                        navigate(defaultRedirect);
+                    }
+                }
             }
         }catch(error){
+            console.log("Login errro:", error);
             setErrors({ error: 'Gabim, ju lutem provoni perseri.' });
         }
     };

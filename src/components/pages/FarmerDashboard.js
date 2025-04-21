@@ -472,11 +472,7 @@ function FarmerDashboard() {
 
 function NavItem({ icon, label, isActive, onClick }) {
     return (
-        <button
-            onClick={onClick}
-            className={`nav-item ${isActive ? 'active' : ''}`}
-            aria-current={isActive ? 'page' : undefined}
-        >
+        <button onClick={onClick} className={`nav-item ${isActive ? 'active' : ''}`} aria-current={isActive ? 'page' : undefined}>
             <span className="nav-icon">{icon}</span>
             <span className="nav-label">{label}</span>
         </button>

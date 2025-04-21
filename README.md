@@ -14,7 +14,7 @@ A simple web platform that connects **farmers** with **consumers**, allowing fre
 | 🧺 Farmer Dashboard | Add, Delete, and Modify products | ✅ Done |
 | 🏡 Public Homepage | Displays all products to all users | ✅ Done |
 | 🔍 Product Search/Filter | Simple search or filter functionality | ✅ Done |
-| 📩 Purchase Request | Consumers can send requests to farmers | 🔄 In Progress |
+| 📩 Purchase Request | Consumers can send requests to farmers | ✅ In Progress |
 | 📱 Responsive Design | Optimized for all screen sizes | ✅ Done |
 
 ## User Roles
@@ -37,7 +37,7 @@ A simple web platform that connects **farmers** with **consumers**, allowing fre
 - ✅ Farmer homepage: Add, Delete, Update products
 - ✅ Public product list (homepage)
 - ✅ Product search or filtering
-- 🔄 Consumer can send purchase requests to farmers
+- ✅ Consumer can send purchase requests to farmers
 
 ##  Demo
 

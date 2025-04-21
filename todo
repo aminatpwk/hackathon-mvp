@@ -58,3 +58,13 @@ user_roles table:
 - user_id (FK)
 - role_id (FK)
 - (Together these form a composite PK)
+
+product_requests table to keep the requests coming form the consumers.
+ - request_id;
+ - product_id;
+ - consumer_id;
+ - farmer_id;
+ - sasia;
+ - status;
+ - date_kerkese;
+ - mesazh;

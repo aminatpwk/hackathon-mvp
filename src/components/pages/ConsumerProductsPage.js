@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, ShoppingBag, X } from 'lucide-react';
-import {Link, useNavigate} from "react-router-dom";
+import { Search, Filter, ShoppingBag, X, LogOut, User } from 'lucide-react';
+import { Link, useNavigate } from "react-router-dom";
 
-export default function ProductsPage() {
+export default function ConsumerProductsPage() {
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -12,15 +12,57 @@ export default function ProductsPage() {
     const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
     const [showModal, setShowModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [username, setUsername] = useState(''); // Add state for username
     const navigate = useNavigate();
 
     const allCities = [...new Set(products.map(product => product.city))];
     const allCategories = [...new Set(products.map(product => product.category))];
 
     useEffect(() => {
+        checkAuthentication();
+    }, []);
+
+    const checkAuthentication = async () => {
+        try {
+            const response = await fetch('http://localhost/My%20projects/hackathon-fti2025/php/api/check_session.php', {
+                method: 'GET',
+                credentials: 'include'
+            });
+
+            const data = await response.json();
+
+            if (data.loggedIn) {
+                setUsername(data.username);
+            } else {
+                navigate('/hyr');
+            }
+        } catch (error) {
+            console.error('Error checking authentication:', error);
+            navigate('/hyr');
+        }
+    };
+
+    const handleLogout = async () => {
+        try {
+           const response =  await fetch('http://localhost/My%20projects/hackathon-fti2025/php/api/logout.php', {
+                method: 'POST',
+                credentials: 'include'
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            navigate(result.redirect || '/hyr');
+        } catch (error) {
+            console.error('Error during logout:', error);
+        }
+    };
+
+    useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await fetch('http://localhost/My%20projects/hackathon-fti2025/php/api/allproducts.php'); // Update with your actual domain and path
+                const response = await fetch('http://localhost/My%20projects/hackathon-fti2025/php/api/allproducts.php');
                 const data = await response.json();
                 setProducts(data);
                 setFilteredProducts(data);
@@ -77,40 +119,36 @@ export default function ProductsPage() {
         setShowModal(true);
     };
 
-    const handlePurchaseRequest = async() => {
-       const consumerId = localStorage.getItem('consumerId');
-       if(!consumerId){
-           alert("Duhet te identifikoheni per te bere nje kerkese.");
-           navigate('/hyr');
-           return;
-       }
+    const handlePurchaseRequest = async () => {
+        try {
+            const quantity = document.getElementById('quantity')?.value || 1;
+            const message = document.getElementById('message')?.value || '';
 
-       try{
-           const quantity = document.getElementById('quantity')?.value || 1;
-           const message = document.getElementById('message')?.value || '';
-           const response = await fetch('http://localhost/My%20projects/hackathon-fti2025/php/api/product_request.php',{
-               method: 'POST',
-               headers: {
-                   'Content-Type': 'application/json',
-               },
-               body: JSON.stringify({
-                   product_id: selectedProduct.id,
-                   consumer_id: consumerId,
-                   sasia: quantity,
-                   mesazh: message
-               })
-           });
-           const result = await response.json();
-           if(response.ok){
-               alert(`Kerkesa per blerjen e produktit "${selectedProduct.name}" u dergua me sukses`);
-               setShowModal(false);
-           }else{
-               alert(`Gabim: ${result.message}`);
-           }
-       }catch(error){
-            console.error("Error sending purchase request: ", error);
-            alert("Ka ndodhur nje gabim gjate dergimit te kerkeses.");
-       }
+            const response = await fetch('http://localhost/My%20projects/hackathon-fti2025/php/api/product_request.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    product_id: selectedProduct.id,
+                    sasia: quantity,
+                    mesazh: message
+                })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert(`Kërkesa për blerjen e produktit "${selectedProduct.name}" u dërgua me sukses!`);
+                setShowModal(false);
+            } else {
+                alert(`Gabim: ${result.message}`);
+            }
+        } catch (error) {
+            console.error('Error sending purchase request:', error);
+            alert('Ka ndodhur një gabim gjatë dërgimit të kërkesës.');
+        }
     };
 
     const removeFilter = (filterType) => {
@@ -133,6 +171,7 @@ export default function ProductsPage() {
             color: '#ffffff',
             padding: '80px 20px 40px',
             textAlign: 'center',
+            position: 'relative',
         },
         title: {
             fontSize: '32px',
@@ -176,6 +215,33 @@ export default function ProductsPage() {
             marginLeft: '8px',
             cursor: 'pointer',
             fontWeight: '500',
+        },
+        userPanel: {
+            position: 'absolute',
+            top: '16px',
+            right: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+        },
+        username: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            color: '#ffffff',
+            fontWeight: '500',
+        },
+        logoutButton: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            color: '#ffffff',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            border: 'none',
+            borderRadius: '4px',
+            padding: '6px 12px',
+            cursor: 'pointer',
+            transition: 'background-color 0.3s ease',
         },
         filterContainer: {
             backgroundColor: '#ffffff',
@@ -462,18 +528,6 @@ export default function ProductsPage() {
             fontSize: '16px',
             color: '#666666',
         },
-        purchaseButton: {
-            backgroundColor: '#235e3a',
-            color: '#ffffff',
-            border: 'none',
-            borderRadius: '4px',
-            padding: '12px 24px',
-            fontSize: '16px',
-            fontWeight: '600',
-            cursor: 'pointer',
-            width: '100%',
-            transition: 'background-color 0.3s ease',
-        },
         formGroup: {
             marginBottom: '16px',
         },
@@ -500,23 +554,35 @@ export default function ProductsPage() {
             minHeight: '100px',
             resize: 'vertical',
         },
+        purchaseButton: {
+            backgroundColor: '#235e3a',
+            color: '#ffffff',
+            border: 'none',
+            borderRadius: '4px',
+            padding: '12px 24px',
+            fontSize: '16px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            width: '100%',
+            transition: 'background-color 0.3s ease',
+        },
     };
 
     return (
         <div style={styles.container}>
             <header style={styles.header}>
-                <button onClick={() => navigate(-1)} style={{
-                    position: 'absolute',
-                    top: '16px',
-                    left: '16px',
-                    background: 'none',
-                    border: 'none',
-                    color: '#ffffff',
-                    cursor: 'pointer',
-                    fontSize: '16px',
-                    padding: 0}}>
-                    ← Kthehu
-                </button>
+                <div style={styles.userPanel}>
+                    <div style={styles.username}>
+                        <User size={18} />
+                        <span>{username}</span>
+                    </div>
+                    <button style={styles.logoutButton} onClick={handleLogout}
+                        onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'}
+                        onMouseLeave={(e) => e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'}>
+                        <LogOut size={18} />
+                        <span>Dil</span>
+                    </button>
+                </div>
 
                 <h1 style={styles.title}>Produktet Tona</h1>
                 <p style={styles.subtitle}>
@@ -593,12 +659,12 @@ export default function ProductsPage() {
                     <div style={styles.productsGrid}>
                         {filteredProducts.map(product => (
                             <div key={product.id}
-                                style={{
-                                    ...styles.productCard,
-                                    ...(hoveredProductId === product.id ? styles.productCardHover : {})
-                                }}
-                                onMouseEnter={() => setHoveredProductId(product.id)}
-                                onMouseLeave={() => setHoveredProductId(null)}
+                                 style={{
+                                     ...styles.productCard,
+                                     ...(hoveredProductId === product.id ? styles.productCardHover : {})
+                                 }}
+                                 onMouseEnter={() => setHoveredProductId(product.id)}
+                                 onMouseLeave={() => setHoveredProductId(null)}
                                  onClick={() => handleProductClick(product)}>
                                 <div style={styles.productContent}>
                                     <div style={styles.productCategory}>{product.category}</div>
@@ -634,17 +700,12 @@ export default function ProductsPage() {
                         </button>
 
                         <div style={modalStyles.modalImage}></div>
-
                         <div style={modalStyles.modalCategory}>{selectedProduct.category}</div>
-
                         <h2 style={modalStyles.modalTitle}>{selectedProduct.name}</h2>
-
                         <div style={modalStyles.modalLocation}>
                             <span>🌍 {selectedProduct.city}</span>
                         </div>
-
                         <p style={modalStyles.modalDescription}>{selectedProduct.description}</p>
-
                         <div style={modalStyles.modalPrice}>
                             {selectedProduct.price} ALL
                             <span style={modalStyles.modalUnit}> / {selectedProduct.unit}</span>
@@ -694,29 +755,29 @@ export default function ProductsPage() {
                             <ul style={styles.footerList}>
                                 <li style={styles.footerListItem}>
                                     <Link to="/terms" style={styles.footerLink}
-                                        onMouseEnter={(e) => (e.target.style.color = '#ffffff')}
-                                        onMouseLeave={(e) => (e.target.style.color = '#72b584')}>
+                                          onMouseEnter={(e) => (e.target.style.color = '#ffffff')}
+                                          onMouseLeave={(e) => (e.target.style.color = '#72b584')}>
                                         Kushtet e Përdorimit
                                     </Link>
                                 </li>
                                 <li style={styles.footerListItem}>
                                     <Link to="/privacy" style={styles.footerLink}
-                                        onMouseEnter={(e) => (e.target.style.color = '#ffffff')}
-                                        onMouseLeave={(e) => (e.target.style.color = '#72b584')}>
+                                          onMouseEnter={(e) => (e.target.style.color = '#ffffff')}
+                                          onMouseLeave={(e) => (e.target.style.color = '#72b584')}>
                                         Politika e Privatësisë
                                     </Link>
                                 </li>
                                 <li style={styles.footerListItem}>
                                     <Link to="/blog" style={styles.footerLink}
-                                        onMouseEnter={(e) => (e.target.style.color = '#ffffff')}
-                                        onMouseLeave={(e) => (e.target.style.color = '#72b584')}>
+                                          onMouseEnter={(e) => (e.target.style.color = '#ffffff')}
+                                          onMouseLeave={(e) => (e.target.style.color = '#72b584')}>
                                         Blog
                                     </Link>
                                 </li>
                                 <li style={styles.footerListItem}>
                                     <Link to="/faq" style={styles.footerLink}
-                                        onMouseEnter={(e) => (e.target.style.color = '#ffffff')}
-                                        onMouseLeave={(e) => (e.target.style.color = '#72b584')}>
+                                          onMouseEnter={(e) => (e.target.style.color = '#ffffff')}
+                                          onMouseLeave={(e) => (e.target.style.color = '#72b584')}>
                                         FAQ
                                     </Link>
                                 </li>

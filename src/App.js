@@ -7,7 +7,8 @@ import Products from './components/pages/Products';
 import LoginForm from './components/pages/LoginForm';
 import TermsOfUsePage from "./components/pages/TermsOfUsePage";
 import PrivacyPolicyPage from "./components/pages/PrivacyPolicyPage";
-
+import FAQPage from "./components/pages/FaqPage";
+import ConsumerProductsPage from "./components/pages/ConsumerProductsPage";
 function App() {
   return (
       <Router>
@@ -19,6 +20,8 @@ function App() {
             <Route path = "/hyr" element = {<LoginForm/>}/>
             <Route path = "/terms" element = {<TermsOfUsePage/>}/>
             <Route path = "/privacy" element = {<PrivacyPolicyPage/>}/>
+            <Route path = "/faq" element = {<FAQPage/>}/>
+            <Route path = "/consumerdashboard" element = {<ConsumerProductsPage/>}/>
         </Routes>
       </Router>
   );

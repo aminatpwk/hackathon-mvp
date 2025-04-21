@@ -361,13 +361,6 @@ export default function FAQPage() {
                                     </Link>
                                 </li>
                                 <li style={styles.footerListItem}>
-                                    <Link to="/blog" style={styles.footerLink}
-                                          onMouseEnter={(e) => (e.target.style.color = '#ffffff')}
-                                          onMouseLeave={(e) => (e.target.style.color = '#72b584')}>
-                                        Blog
-                                    </Link>
-                                </li>
-                                <li style={styles.footerListItem}>
                                     <Link to="/faq" style={{...styles.footerLink, color: '#ffffff'}}
                                           onMouseLeave={(e) => (e.target.style.color = '#ffffff')}>
                                         FAQ

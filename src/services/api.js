@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost/My%20projects/hackathon-fti2025/php/api/products.php';
 
-// Axios default to include session cookies
 axios.defaults.withCredentials = true;
 
 export const getProducts = async () => {

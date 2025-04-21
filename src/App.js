@@ -13,6 +13,7 @@ function App() {
   return (
       <Router>
         <Routes>
+            <Route path="/" element={<LandingPage />} />
             <Route path="/merrbio" element={<LandingPage/>}/>
             <Route path="/register" element={<RegisterForm />} />
             <Route path="/farmerdashboard" element={<FarmerDashboard />} />
